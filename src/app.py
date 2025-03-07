@@ -1,7 +1,8 @@
 import gradio as gr
 from chatbot.chatbot_backend import ChatBot
 from utils.ui_settings import UISettings
-
+from flask import Flask
+from waitress import serve
 
 with gr.Blocks() as demo:
     with gr.Tabs():
@@ -56,29 +57,29 @@ with gr.Blocks() as demo:
                                                               None, [input_txt], queue=False)
 
 
-if __name__ == "__main__":
-    demo.launch()
+# if __name__ == "__main__":
+#     demo.launch()
 
 # modification for it tobe able to run under cPanel
-# if __name__ == "__main__":
-#     import sys
-#     from waitress import serve  # Use Waitress as the production server
+if __name__ == "__main__":
+    import sys
+    from waitress import serve  # Use Waitress as the production server
 
-#     # Bind the Gradio app to Flask (for production)
-#     import gradio as gr
-#     from flask import Flask
+    # Bind the Gradio app to Flask (for production)
+    import gradio as gr
+    from flask import Flask
 
-#     flask_app = Flask(__name__)
+    flask_app = Flask(__name__)
 
-#     @flask_app.route("/")
-#     def index():
-#         return demo.launch(
-#             server_name="0.0.0.0",
-#             server_port=5000,
-#             inline=True,
-#             debug=False,
-#             share=False
-#         )
+    @flask_app.route("/")
+    def index():
+        return demo.launch(
+            server_name="0.0.0.0",
+            server_port=5000,
+            inline=True,
+            debug=False,
+            share=False
+        )
 
-#     print("🚀 Starting Gradio app on production server...")
-#     serve(flask_app, host="0.0.0.0", port=5000)
+    print("🚀 Starting Gradio app on production server...")
+    serve(flask_app, host="0.0.0.0", port=5000)
